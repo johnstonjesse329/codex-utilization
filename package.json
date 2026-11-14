@@ -1,0 +1,23 @@
+{
+  "name": "codex-utilization",
+  "displayName": "Codex Utilization",
+  "description": "Show Codex subscription usage and reset times in the status bar.",
+  "version": "0.1.0",
+  "publisher": "local",
+  "license": "MIT",
+  "engines": { "vscode": "^1.90.0" },
+  "categories": ["Other"],
+  "main": "./src/extension.js",
+  "activationEvents": ["onStartupFinished"],
+  "contributes": {
+    "commands": [{ "command": "codexUtilization.refresh", "title": "Refresh Usage", "category": "Codex Utilization" }],
+    "configuration": {
+      "title": "Codex Utilization",
+      "properties": {
+        "codexUtilization.executable": { "type": "string", "default": "codex", "scope": "application", "description": "Path to the Codex executable, or codex if it is on PATH. On Windows use the executable, not a .cmd wrapper." },
+        "codexUtilization.refreshSeconds": { "type": "number", "default": 120, "minimum": 30, "maximum": 3600, "description": "Time between usage refreshes, in seconds." }
+      }
+    }
+  },
+  "scripts": { "test": "node --test test/*.test.js" }
+}
