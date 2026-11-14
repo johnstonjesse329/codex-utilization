@@ -1,7 +1,7 @@
 'use strict';
 const vscode = require('vscode');
 const { readLimits } = require('./client');
-const { windows, duration, summary, severity } = require('./usage');
+const { windows, duration, windowLabel, summary, severity, remaining, resetCountdown } = require('./usage');
 
 function setBarColor(bar, state) {
   const colors = {
@@ -33,7 +33,7 @@ function activate(context) {
       const items = windows(result || {});
       if (!items.length) throw new Error('No usage windows returned. Check that Codex is signed in with ChatGPT.');
       bar.text = `$(pulse) Codex ${summary(items)}`;
-      bar.tooltip = new vscode.MarkdownString(['**Codex usage remaining**', ...items.map(x => `- ${x.name} · ${duration(x.minutes)}: ${Math.max(0, Math.min(100, 100 - x.used)).toFixed(0)}% remaining${x.reset ? ` · resets ${new Date(x.reset * 1000).toLocaleString()}` : ''}`), '', 'Click to refresh.'].join('\n'));
+      bar.tooltip = new vscode.MarkdownString(['**Codex usage remaining**', 'Each quota window is independent. The status color reflects the lowest remaining window.', ...items.map(x => `- **${windowLabel(x.minutes)} limit**: ${remaining(x).toFixed(0)}% left${x.reset ? ` · resets in ${resetCountdown(x.reset)} (${new Date(x.reset * 1000).toLocaleString()})` : ''}`), '', 'Click to refresh.'].join('\n'));
       setBarColor(bar, severity(items));
     } catch (error) {
       if (disposed) return;
