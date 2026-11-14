@@ -14,7 +14,7 @@ function setBarColor(bar, state) {
 }
 
 function activate(context) {
-  const bar = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 50);
+  const bar = vscode.window.createStatusBarItem('codexUtilization.status', vscode.StatusBarAlignment.Right, 100);
   bar.name = 'Codex Utilization';
   bar.command = 'codexUtilization.refresh';
   bar.text = '$(sync~spin) Codex';
