@@ -22,4 +22,16 @@ function summary(items) {
   return items.map(item => `${duration(item.minutes)} ${Math.max(0, Math.min(100, 100 - item.used)).toFixed(0)}%`).join(' · ');
 }
 
-module.exports = { windows, duration, summary };
+function remaining(item) {
+  return Math.max(0, Math.min(100, 100 - item.used));
+}
+
+function severity(items, warningAt = 25, criticalAt = 10) {
+  if (!items.length) return 'normal';
+  const lowest = Math.min(...items.map(remaining));
+  if (lowest <= criticalAt) return 'critical';
+  if (lowest <= warningAt) return 'warning';
+  return 'normal';
+}
+
+module.exports = { windows, duration, summary, remaining, severity };
